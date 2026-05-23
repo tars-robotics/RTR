@@ -1,0 +1,7 @@
+tactile:
+  n_max: 0.0
+  n_min: -0.85
+  tx_max: 1.5
+  tx_min: -0.8
+  ty_max: 1.8
+  ty_min: -1.2

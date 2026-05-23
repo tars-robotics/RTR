@@ -1,0 +1,14 @@
+# src/rtr_async_sys/configs/env/xarm_env.yaml
+
+_target_: rtr_async_sys.env.xarm_env.XarmEnv
+
+n_obs_steps: 1
+pca_load_dir: "data/ckpts/vase2_new_A_abs/rdp_pca"
+robo_ip: "192.168.1.239"
+add_z_mm: 0
+log_tactile: False
+log_dir: "outputs/log_dir"
+compress_obs: False
+servo_mode: False
+
+log_traj_dir: null

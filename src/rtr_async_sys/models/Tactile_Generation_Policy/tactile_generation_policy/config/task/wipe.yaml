@@ -1,0 +1,38 @@
+defaults:
+  - _self_
+
+name: wipe
+task_name: wipe
+
+image_shape: &image_shape [3, 240, 320]
+tactile_shape: &tactile_shape [3, 700]
+shape_meta: &shape_meta
+  # acceptable types: rgb, low_dim
+  obs:
+    wrist_image:
+        shape: *image_shape
+        type: rgb
+    gripper1_tactile:
+        shape: *tactile_shape
+        type: low_dim
+    gripper2_tactile:
+        shape: *tactile_shape
+        type: low_dim
+    tcp_pose:
+      shape: [9]
+      type: low_dim
+  action:
+    shape: [9]
+
+dataset:
+  _target_: tactile_generation_policy.dataset.real_robot_dataset.RealImageTactileDataset
+  shape_meta: *shape_meta
+  dataset_path: data/dish/align_rdp/dish_zarr
+  horizon: ${horizon}
+  pad_before: ${eval:'${n_obs_steps}-1'}
+  pad_after: ${eval:'${n_action_steps}-1'}
+  seed: 42
+  val_ratio: 0.02
+  max_train_episodes: 90
+  delta_action: False
+  relative_action: True

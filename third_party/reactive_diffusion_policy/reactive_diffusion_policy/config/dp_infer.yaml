@@ -1,0 +1,10 @@
+# @package _global_
+
+# path to the checkpoint file
+checkpoint_path: /home/pc/workspace/zyh/reactive_diffusion_policy/data/outputs/2025.09.25/14.45.29_train_diffusion_unet_image_dp_tactile_dish/checkpoints/latest.ckpt
+
+# inference frequency in Hz
+inference_rate: 10
+
+# device to run inference on
+device: 'cuda:0'

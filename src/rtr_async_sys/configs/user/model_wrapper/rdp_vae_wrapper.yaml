@@ -1,0 +1,11 @@
+_target_: rtr_async_sys.model_wrapper.rdp_vae_model_wrapper.RdpVaeModelWrapper
+
+# model: src/rtr_async_sys/configs/model/rdp/dp.yaml
+defaults:
+  - model: rdp/rdp_vae
+  - _self_
+
+ckpt_path: data/checkpoints/rdp_vae/latest.ckpt
+device: cuda:0
+return_raw_action: False
+compress_obs: False

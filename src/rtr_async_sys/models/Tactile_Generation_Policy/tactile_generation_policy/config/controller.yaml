@@ -1,0 +1,13 @@
+log_dir: "./outputs/tactile_vae"
+ckpt_dir: "./outputs/tactile_vae/checkpoints"
+data_path: "data/tactile_data/dish_vase_/tacwm_samples"
+batch_size: 64
+val_batch_size: 8
+lr: 1e-3
+epochs: 500
+beta: 1.0
+device: "cuda"
+controller_mode: "admittance"
+vision_encoder: "resnet18"
+delta_action: true
+relative_action: false

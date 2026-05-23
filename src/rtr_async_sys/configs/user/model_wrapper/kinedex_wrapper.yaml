@@ -1,0 +1,10 @@
+_target_: rtr_async_sys.model_wrapper.kinedex_model_wrapper.KinedexModelWrapper
+
+# model: src/rtr_async_sys/configs/model/rdp/dp.yaml
+defaults:
+  - model: kinedex
+
+ckpt_path: data/ckpts/vase2_new_A_abs/kinedex/latest.ckpt
+device: cuda:0
+return_raw_action: False
+compress_obs: False

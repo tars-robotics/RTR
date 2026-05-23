@@ -1,0 +1,72 @@
+defaults:
+  - real_robot_env@_here_
+  - _self_
+
+teleop_server:
+  # gripper params
+  use_force_control_for_gripper: True
+  max_gripper_width: 0.1
+  min_gripper_width: 0.0
+  grasp_force: 25.0
+  gripper_control_time_interval: 30
+  gripper_control_width_precision: 0.01
+  gripper_never_open: False
+  # teleoperation mode
+  teleop_mode: 'left_arm_3D_translation'
+  relative_translation_scale: 1.0  # for dexterous teleoperation
+
+publisher:
+  # two realsense cameras
+  realsense_camera_publisher: 
+    - camera_serial_number: '036422060422'
+      camera_type: 'D400'
+      camera_name: 'external_camera'
+      rgb_resolution: [640, 480]
+      depth_resolution: [640, 480]
+      random_sample_point_num: 3000
+      fps: 24
+      decimate: 2  # (0-4) decimation_filter magnitude for point cloud
+      cpu_core_id:
+        - 10
+    - camera_serial_number: '135122079769'
+      camera_type: 'D400'  
+      camera_name: 'left_wrist_camera'
+      rgb_resolution: [640, 480]
+      depth_resolution: [640, 480]
+      random_sample_point_num: 3000
+      fps: 24
+      decimate: 2  # (0-4) decimation_filter magnitude for point cloud
+      enable_streaming: False
+      streaming_server_ip: ${task.publisher.vr_server_ip}
+      streaming_server_port: 10004
+      streaming_quality: 10 # (0-100) 0: lowest quality, smallest size, 100: highest quality, largest size
+      streaming_chunk_size: 1024
+      streaming_display_params_list:
+        - position: [ -0.5, 0.0, 0.8 ]
+          rotation: [ -90, 50, 0. ]
+          scale: [ 0.005, 0.005, 0.005 ]
+      cpu_core_id:
+        - 10
+  # USB camera (GelSight)
+  usb_camera_publisher:
+    - camera_name: 'left_gripper_camera_1'
+      camera_type: 'gelsight'
+      fps: 24
+      vr_server_ip: ${task.publisher.vr_server_ip}
+      vr_server_port: ${task.publisher.vr_server_port}
+      dimension: 2
+      marker_vis_rotation_angle: 90
+      cpu_core_id:
+        - 11
+        - 12
+        - 13
+    - camera_name: 'left_gripper_camera_2'
+      camera_type: 'MCTac'
+      fps: 24
+      vr_server_ip: ${task.publisher.vr_server_ip}
+      vr_server_port: ${task.publisher.vr_server_port}
+      dimension: 2
+      image_rotation: 0
+      marker_vis_rotation_angle: 0
+      cpu_core_id:
+        - 14

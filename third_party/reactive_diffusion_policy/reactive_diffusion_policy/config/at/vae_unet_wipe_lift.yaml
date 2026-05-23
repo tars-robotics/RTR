@@ -1,0 +1,10 @@
+horizon: 32
+n_obs_steps: 2
+dataset_obs_temporal_downsample_ratio: 1
+
+policy:
+  input_dim: 10
+  horizon: ${horizon}
+  kl_multiplier: 1e-6
+  load_dir: null
+  act_scale: 1.0

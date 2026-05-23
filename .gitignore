@@ -1,0 +1,176 @@
+# ============================================================
+# Project-local files
+# ============================================================
+
+docs_old
+
+# Top-level generated data and run artifacts.
+/data/
+/outputs/
+
+# Machine-specific symlink to an external dataset.
+/rdp_pca
+
+# Private one-off files and notes not intended for open source.
+/trans.py
+/docs_old/
+/scripts_old
+/tests/test.txt
+
+
+# ============================================================
+# Editor, OS, and local backup files
+# ============================================================
+
+.git_backup/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+
+# ============================================================
+# Python
+# ============================================================
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+.ipynb_checkpoints/
+
+# Virtual environments and local interpreter pins.
+/.venv/
+/venv/
+/env/
+.python-version
+
+
+# ============================================================
+# Secrets and local environment files
+# ============================================================
+
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+
+# ============================================================
+# ML artifacts and generated datasets
+# ============================================================
+
+# Run outputs and experiment logs. Patterns without trailing slash also
+# catch symlinks with these names.
+**/outputs*
+**/wandb
+**/wandb/
+**/logs
+**/logs/
+**/debug_imgs
+**/debug_imgs/
+**/ckpts*
+**/checkpoints
+**/checkpoints/
+lightning_logs/
+events.out.tfevents.*
+*.tfevents.*
+
+# Model weights.
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.onnx
+
+# Large generated data and media.
+*.npy
+*.npz
+*.h5
+*.hdf5
+*.zarr/
+*.pkl
+*.pickle
+*.bag
+*.pcd
+*.ply
+*.mp4
+*.avi
+*.mov
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
+
+# ============================================================
+# Third-party libraries
+# ============================================================
+
+# We track modified third-party source code in third_party/, but not
+# training data, run artifacts, local editor state, or embedded VCS data.
+third_party/**/.git/
+third_party/**/.vscode/
+third_party/**/*.egg-info/
+
+# LIBERO and openvla are excluded from this repository.
+third_party/LIBERO/
+third_party/openvla
+
+# rlds_dataset_builder
+third_party/rlds_dataset_builder/
+
+# Project-specific generated data paths.
+third_party/openvla_oft/openvla-oft/data
+third_party/openvla_oft_latent/openvla-oft/data
+
+third_party/openvla_oft/openvla_oft_finetune/vase_sponge_test1_oft_dataset/data/
+third_party/openvla_oft/openvla_oft_finetune/vase_sponge_test1_oft_6drotate_dataset/data/
+third_party/openvla_oft_latent/openvla_oft_finetune/peel_cucumber_15hz_oft_6drotate_dataset/data/
+third_party/openvla_oft_latent/openvla_oft_finetune/peel_cucumber_60hz_oft_6drotate_dataset/data/
+third_party/openvla_oft_latent/openvla_oft_finetune/wipe_vase_15hz_oft_6drotate_dataset/data/
+third_party/openvla_oft_latent/openvla_oft_finetune/wipe_vase_60hz_oft_6drotate_dataset/data/
+third_party/openvla_oft_latent/openvla_oft_finetune/write_board_15hz_oft_6drotate_dataset/data/
+third_party/openvla_oft_latent/openvla_oft_finetune/write_board_60hz_oft_6drotate_dataset/data/
+third_party/reactive_diffusion_policy/data/
+third_party/reactive_diffusion_policy/inference_node/
+
+
+# ============================================================
+# Current symlink paths
+# ============================================================
+
+# Gitignore cannot ignore files by symlink type. These patterns cover
+# current machine-specific symlinks that are not already ignored above.
+third_party/lerobot/lerobot/configs
+third_party/lerobot/lerobot/docs/source/contributing.md
+third_party/lerobot/lerobot/pi0_5*_model_wrapper.py
+third_party/lerobot/lerobot/scripts
+third_party/lerobot/lerobot/src/lerobot/policies/*/README.md
+third_party/lerobot/lerobot/src/lerobot/robots/*/*.mdx
+third_party/lerobot/lerobot/outputs-vlta
+
+third_party/openvla_oft/openvla-oft/configs
+third_party/openvla_oft/openvla-oft/finetune*.sh
+third_party/openvla_oft/openvla-oft/launch_user*.sh
+third_party/openvla_oft/openvla-oft/myscripts
+third_party/openvla_oft/openvla-oft/openvla_oft_wrapper.py
+third_party/openvla_oft/openvla-oft/readme_inference.md
+third_party/openvla_oft/openvla-oft/test_run.ipynb
+
+third_party/openvla_oft_latent/openvla-oft/configs
+third_party/openvla_oft_latent/openvla-oft/finetune*.sh
+third_party/openvla_oft_latent/openvla-oft/launch_user*.sh
+third_party/openvla_oft_latent/openvla-oft/openvla_oft*_wrapper.py
+third_party/openvla_oft_latent/openvla-oft/readme_inference.md
+third_party/openvla_oft_latent/openvla-oft/test_run.ipynb

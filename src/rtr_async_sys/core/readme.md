@@ -1,0 +1,1 @@
+Protocol layer defining abstract classes

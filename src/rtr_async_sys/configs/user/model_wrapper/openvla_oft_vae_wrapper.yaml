@@ -1,0 +1,12 @@
+_target_: rtr_async_sys.model_wrapper.openvla_oft_vae_model_wrapper.OpenvlaOftVaeModelWrapper
+
+# model: src/rtr_async_sys/configs/model/rdp/dp.yaml
+defaults:
+  - model: rdp/openvla_oft_vae
+  - _self_
+
+ckpt_path: data/ckpts/vase_sponge_test1_60hz/ckpts_abs/openvla_oft/vae/horizon48_compress4_n_embed_10/latest.ckpt
+device: cuda:0
+return_raw_action: False
+compress_obs: False
+dataset_statistics_path: data/ckpts/vase_sponge_test1_60hz/ckpts_abs/openvla_oft/vae/horizon48_compress4_n_embed_10/dataset_statistics.json

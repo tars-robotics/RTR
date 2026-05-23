@@ -1,0 +1,40 @@
+_target_: rtr_async_sys.env.dp_dataset_env.DpDatasetEnv
+
+n_action_steps: 8
+
+
+dataset:
+  _target_: rtr_async_sys.models.reactive_diffusion_policy.dataset.real_image_tactile_dataset.RealImageTactileDataset
+  dataset_path: data/ckpts/vase_sponge_test1/rdp_zarr
+  horizon: 16
+  n_obs_steps: 2
+  n_latency_steps: 0
+  seed: 42
+  val_ratio: 0.00
+  max_train_episodes: null
+  delta_action: False
+  relative_action: False
+
+  # pad_before: ${eval:'${executor.env.dataset.n_obs_steps}-1+${executor.env.dataset.n_latency_steps}'}
+  # pad_after: ${eval:'${executor.env.n_action_steps}-1'}
+
+  shape_meta: &shape_meta
+    obs:
+      left_wrist_img:
+        shape: [3, 240, 320]
+        type: rgb
+      left_robot_tcp_pose:
+        shape: [9]
+        type: low_dim
+      left_robot_gripper_width:
+        shape: [1]
+        type: low_dim
+      left_gripper1_marker_offset_emb:
+        shape: [15]
+        type: low_dim
+    action:
+      shape: [10]
+
+n_obs_steps: 2
+pca_load_dir: data/ckpts/vase_sponge_test1/rdp_pca
+relative_action: False

@@ -1,0 +1,10 @@
+_target_: rtr_async_sys.user.passive_user.PassiveUser
+
+defaults:
+  - model_wrapper:  openvla_oft_model_wrapper
+  - _self_
+
+# model: src/rtr_async_sys/configs/model_wrapper/dp_wrapper.yaml
+controller_endpoint: tcp://127.0.0.1:10020 # make sure the port matches the port of the controller
+scheduler_endpoint: tcp://127.0.0.1:10030
+user_hz: 10

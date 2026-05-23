@@ -1,0 +1,19 @@
+cuda_visible_devices: "0"
+log_dir: "./outputs/tactile_vae_temporal/vase_implicit_single_128"
+data_path: "data/datasets/tro_tac/data_samples/vase/tacwm_samples"
+window_size: 16
+downsample: 1
+batch_size: 64
+val_batch_size: 8
+lr: 1e-4
+epochs: 500
+beta: 1.0
+device: "cuda"
+input_dim: 6
+latent_dim: 16
+hidden_state: 64
+time_compression_ratio: 4
+spatial_compression_ratio: 4
+data_mode: "single_hand" # bi_hand or single_hand
+decoder_mode: "implicit"
+load_ckpt_path: "data/checkpoints/tactile_vae_temporal/best_model.pth"

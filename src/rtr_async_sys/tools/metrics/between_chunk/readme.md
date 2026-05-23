@@ -1,0 +1,1 @@
+Chunk-level data must account for trajectory switches; do not include switched trajectories in statistics.

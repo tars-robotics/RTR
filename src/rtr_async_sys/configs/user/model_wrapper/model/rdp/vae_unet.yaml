@@ -1,0 +1,7 @@
+_target_: rtr_async_sys.models.reactive_diffusion_policy.model.vae_unet.vae_unet.ActionVAE
+
+input_dim: 10
+horizon: 32
+kl_multiplier: 1e-6
+load_dir: null
+act_scale: 1.0

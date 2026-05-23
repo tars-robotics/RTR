@@ -1,0 +1,51 @@
+numpy==1.26.4
+numba
+scipy
+opencv-python
+cffi
+ipykernel
+matplotlib
+zarr
+numcodecs
+h5py
+hydra-core
+einops
+tqdm
+dill
+scikit-video
+scikit-image
+pymunk
+wandb
+threadpoolctl
+shapely
+cython
+imageio
+imageio-ffmpeg
+termcolor
+tensorboard
+tensorboardx
+psutil
+click
+boto3
+accelerate
+datasets
+diffusers
+av
+cmake
+timm
+peft
+# for teleop
+fastapi
+uvicorn
+pyrealsense2
+pydantic
+loguru
+bson
+open3d
+transforms3d
+pyinstrument
+py_cli_interaction
+pygame
+# install this by yourself
+# torch==1.13.1
+# torchvision==0.14.1

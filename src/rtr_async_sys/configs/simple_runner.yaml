@@ -1,0 +1,17 @@
+_target_: rtr_async_sys.runner.simple_runner.SimpleRunner
+
+defaults:
+  - controller: sync_controller
+  - executor: sync_nonservo_executor
+  - scheduler: simple_scheduler
+  - user@user0: simple_user
+  # - user@user1: simple_user_dataset
+  - _self_
+
+# controller_cfg: ${controller}
+# executor_cfg: src/rtr_async_sys/configs/executor/sync_nonservo_executor.yaml
+# scheduler_cfg: src/rtr_async_sys/configs/scheduler/simple_scheduler.yaml
+# user_cfgs: ["src/rtr_async_sys/configs/user/simple_user.yaml"]
+# user_cfgs:
+#   - ${user0}
+  # - ${user1}

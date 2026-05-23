@@ -1,0 +1,20 @@
+cuda_visible_devices: "1"
+log_dir: "outputs/action_vae/vase"
+data_path: "data/vase_sponge_test1/tacwm_samples"
+window_size: 16 #32
+downsample: 1
+batch_size: 64
+val_batch_size: 8
+lr: 1e-4
+epochs: 500
+device: "cuda"
+input_dim: 9
+horizon: 16 # 32 match with window_size
+latent_dim: 512
+hidden_state: 512
+n_embed: 32 #32
+time_compression_ratio: 4
+act_scale: 1.0
+action_space: "abs_action" # "abs_action" or "delta_action" or "relative_action"
+mlp_layer_num: 1
+load_ckpt_path: "data/checkpoints/action_vae/latest.pth"

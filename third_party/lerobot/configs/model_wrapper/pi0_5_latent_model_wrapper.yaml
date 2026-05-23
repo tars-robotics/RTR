@@ -1,0 +1,31 @@
+_target_: pi0_5_latent_model_wrapper.PI05LatentModelWrapper
+
+device: cuda:0
+return_raw_action: False  # Must be False
+prompt: "wipe the vase."
+compress_obs: False
+interpolate: False
+interpolate_ratio: 1
+vae_config_path: "src/rtr_async_sys/configs/user/model_wrapper/model/rdp/pi0_5_vae.yaml"
+vae_load_path: "outputs/vae/pi05_training_vae_steps20000/checkpoints/latest.ckpt"
+latent_dataset_statistics: "outputs/vae/pi05_training_vae_steps20000/latent_dataset_stats.json"
+# TODO: cfg
+cfg:
+  _target_: lerobot.configs.train.TrainPipelineConfig
+  output_dir: outputs/eval/test
+  job_name: test
+  policy:
+    _target_: lerobot.policies.pi05.configuration_pi05.PI05Config
+    pretrained_path: "outputs/pi05_training_latent_steps20000_world1/checkpoints/004000/pretrained_model"
+    compile_model: False
+    dtype: bfloat16
+    chunk_size: 48
+    n_action_steps: 48
+    max_action_dim: 10
+    max_state_dim: 9
+    device: cuda:0
+    push_to_hub: False
+  dataset:
+    _target_: lerobot.configs.default.DatasetConfig
+    repo_id: "sadpiggy/xarm_vase_sponge_test1_state9_60hz"
+  

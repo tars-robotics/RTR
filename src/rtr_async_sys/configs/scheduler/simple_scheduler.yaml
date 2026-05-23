@@ -1,0 +1,6 @@
+_target_: rtr_async_sys.scheduler.simple_scheduler.SimpleScheduler
+
+controller_endpoint: tcp://127.0.0.1:10021
+executor_endpoint: tcp://127.0.0.1:10011
+user_endpoints: ["tcp://127.0.0.1:10030"]
+schedule_hz: 0.05

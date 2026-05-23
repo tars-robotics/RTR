@@ -1,0 +1,30 @@
+defaults:
+  - train_latent_diffusion_unet_real_image_workspace
+  - override /task: real_wipe_image_gelsight_emb_ldp_24fps_without_tactile_dual_arm
+  - override /at: temporal_conv_vae_wipe_lift
+  - _self_
+
+name: train_latent_diffusion_unet_temporal_conv_vae_image
+use_latent_action_before_vq: False
+
+policy:
+  at:
+    _target_: reactive_diffusion_policy.model.vae.temporal_conv_vae.TemporalConvVAE
+    hidden_dim: ${at.policy.hidden_dim}
+    downsample_factor: ${at.policy.downsample_factor}
+    blocks_per_level: ${at.policy.blocks_per_level}
+    kernel_size: ${at.policy.kernel_size}
+    kl_multiplier: ${at.policy.kl_multiplier}
+
+task:
+  env_runner:
+    use_latent_action_with_rnn_decoder: False
+  dataset:
+    use_latent_action_before_vq: ${use_latent_action_before_vq}
+    at:
+      _target_: reactive_diffusion_policy.model.vae.temporal_conv_vae.TemporalConvVAE
+      hidden_dim: ${at.policy.hidden_dim}
+      downsample_factor: ${at.policy.downsample_factor}
+      blocks_per_level: ${at.policy.blocks_per_level}
+      kernel_size: ${at.policy.kernel_size}
+      kl_multiplier: ${at.policy.kl_multiplier}

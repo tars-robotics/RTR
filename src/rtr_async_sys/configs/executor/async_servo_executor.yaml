@@ -1,0 +1,14 @@
+_target_: rtr_async_sys.executor.async_nonservo_executor.AsyncNonServoExecutor
+
+defaults:
+  - env: dp_dataset_env
+  - _self_
+  
+ctrl_bind: tcp://*:10010
+sched_bind: tcp://*:10011
+max_merge_len: 1
+execute_hz: 10
+servo_mode: True
+interpolate_ratio: 1
+adaptive_interpolate_ratio: 2
+servo_speed: 150

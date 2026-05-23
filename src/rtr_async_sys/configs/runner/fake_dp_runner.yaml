@@ -1,0 +1,6 @@
+_target_: rtr_async_sys.runner.fake_dp_runner.FakeDpRunner
+
+ckpt_path: data/reverse_ckpts/dp.ckpt
+model_cfg: src/rtr_async_sys/configs/model/rdp/dp.yaml
+env_cfg: src/rtr_async_sys/configs/env/dp_dataset_env.yaml
+device: cuda:0

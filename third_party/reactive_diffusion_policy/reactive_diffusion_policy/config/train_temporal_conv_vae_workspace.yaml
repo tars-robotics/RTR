@@ -1,0 +1,97 @@
+defaults:
+  - task: real_wipe_image_gelsight_emb_at_24fps_dual_arm
+  - at: temporal_conv_vae_wipe_lift
+  - _self_
+
+name: train_temporal_conv_vae
+_target_: reactive_diffusion_policy.workspace.train_at_workspace.TrainATWorkspace
+
+task_name: ${task.name}
+shape_meta: ${task.shape_meta}
+exp_name: "default"
+
+horizon: ${at.horizon}
+n_obs_steps: ${at.n_obs_steps}
+n_action_steps: 8
+n_latency_steps: 0
+dataset_obs_steps: ${eval:'${n_obs_steps}*${at.dataset_obs_temporal_downsample_ratio}'}
+dataset_obs_temporal_downsample_ratio: ${at.dataset_obs_temporal_downsample_ratio}
+
+policy:
+  _target_: reactive_diffusion_policy.model.vae.temporal_conv_vae.TemporalConvVAE
+  shape_meta: ${task.shape_meta}
+  horizon: ${horizon}
+  n_latent_dims: ${at.policy.n_latent_dims}
+  hidden_dim: ${at.policy.hidden_dim}
+  downsample_factor: ${at.policy.downsample_factor}
+  blocks_per_level: ${at.policy.blocks_per_level}
+  kernel_size: ${at.policy.kernel_size}
+  kl_multiplier: ${at.policy.kl_multiplier}
+  n_embed: ${at.policy.n_embed}
+  eval: ${at.policy.eval}
+  act_scale: ${at.policy.act_scale}
+
+dataloader:
+  batch_size: 64
+  num_workers: 4
+  shuffle: True
+  pin_memory: True
+  persistent_workers: True
+
+val_dataloader:
+  batch_size: 64
+  num_workers: 4
+  shuffle: False
+  pin_memory: True
+  persistent_workers: True
+
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 1.0e-3
+  weight_decay: 1.0e-4
+
+training:
+  device: "cuda:0"
+  seed: 42
+  debug: False
+  resume: True
+  lr_scheduler: cosine
+  lr_warmup_steps: 100
+  num_epochs: 1001
+  gradient_accumulate_every: 1
+  use_ema: False
+  freeze_encoder: False
+  rollout_every: -1
+  checkpoint_every: 10
+  val_every: 1
+  sample_every: -1
+  max_train_steps: null
+  max_val_steps: null
+  tqdm_interval_sec: 1.0
+
+logging:
+  project: at
+  resume: True
+  mode: online
+  name: ${now:%Y.%m.%d-%H.%M.%S}_${name}_${task_name}
+  tags: ["${name}", "${task_name}", "${exp_name}"]
+  id: null
+  group: null
+
+checkpoint:
+  topk:
+    monitor_key: train_loss
+    mode: min
+    k: 1
+    format_str: 'epoch={epoch:04d}-train_loss={train_loss:.6f}.ckpt'
+  save_last_ckpt: True
+  save_last_snapshot: False
+
+hydra:
+  job:
+    override_dirname: ${name}
+  run:
+    dir: data/outputs/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}
+  sweep:
+    dir: data/outputs/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}
+    subdir: ${hydra.job.num}

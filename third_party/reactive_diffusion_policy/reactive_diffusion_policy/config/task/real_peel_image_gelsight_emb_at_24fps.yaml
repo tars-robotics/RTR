@@ -1,0 +1,44 @@
+defaults:
+  - real_peel_two_realsense_one_gelsight_one_mctac_24fps@_here_
+  - _self_
+
+name: real_peel_image_gelsight_emb_at_24fps
+
+image_shape: [3, 240, 320]
+dataset_path: data/peel_v1_zarr
+
+shape_meta: &shape_meta
+  # acceptable types: rgb, low_dim
+  obs:
+    left_robot_tcp_pose:
+      shape: [3]
+      type: low_dim
+    left_robot_gripper_width:
+      shape: [1]
+      type: low_dim
+    left_gripper1_marker_offset_emb:
+      shape: [ 15 ]  # the raw dimension is (63*2), we use PCA to reduce the dimension to 15
+      type: low_dim
+  extended_obs: # for the AT RNN decoder of the latent diffusion policy
+    left_gripper1_marker_offset_emb:
+      shape: [ 15 ]  # the raw dimension is (63*2), we use PCA to reduce the dimension to 15
+      type: low_dim
+  action:
+    shape: [4] # (3+6+1) (x, y, z, 6d rotation, gripper_width)
+
+dataset:
+  _target_: reactive_diffusion_policy.dataset.real_image_tactile_dataset.RealImageTactileDataset
+  shape_meta: *shape_meta
+  dataset_path: ${task.dataset_path}
+  horizon: ${horizon}
+  pad_before: ${eval:'${n_obs_steps}-1+${n_latency_steps}'}
+  pad_after: ${eval:'${n_action_steps}-1'}
+  n_obs_steps: ${dataset_obs_steps}
+  obs_temporal_downsample_ratio: ${dataset_obs_temporal_downsample_ratio}
+  n_latency_steps: ${n_latency_steps}
+  seed: 42
+  val_ratio: 0.00
+  max_train_episodes: null
+  delta_action: False
+  relative_action: True
+

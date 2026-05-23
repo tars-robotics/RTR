@@ -1,0 +1,11 @@
+_target_: openvla_oft_wrapper.OpenvlaOftModelWrapper
+
+model: None
+ckpt_path: "data/ckpts/openvla_oft/vase_sponge_test1_oft/openvla-7b-oft-finetuned-libero-spatial+vase_sponge_test1_oft_dataset+b8+lr-0.0005+lora-r32+dropout-0.0--image_aug--60000_chkpt"
+device: cuda:0
+return_raw_action: False # Must be False
+prompt: "wipe the vase."
+compress_obs: False
+unnorm_key: "vase_sponge_test1_oft_dataset"
+interpolate: False
+interpolate_ratio: 1

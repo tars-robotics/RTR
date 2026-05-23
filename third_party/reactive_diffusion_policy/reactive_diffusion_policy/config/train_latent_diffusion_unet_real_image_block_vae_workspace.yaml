@@ -1,0 +1,198 @@
+defaults:
+  - task: real_peel_image_gelsight_emb_ldp_24fps
+  - at: at_peel
+  - _self_
+
+name: train_latent_diffusion_unet_image
+_target_: reactive_diffusion_policy.workspace.train_diffusion_unet_image_workspace.TrainDiffusionUnetImageWorkspace
+
+task_name: ${task.name}
+shape_meta: ${task.shape_meta}
+exp_name: "default"
+
+horizon: ${at.horizon}
+encode_horizon: ${at.encode_horizon}
+encode_block_num: ${at.encode_block_num}
+
+n_obs_steps: ${at.n_obs_steps}
+n_action_steps: 8
+n_latency_steps: 0
+obs_temporal_downsample_ratio: 2
+dataset_obs_steps: ${eval:'${at.n_obs_steps}*${at.dataset_obs_temporal_downsample_ratio}'} # for latent diffusion policy with 24fps
+dataset_obs_temporal_downsample_ratio: ${at.dataset_obs_temporal_downsample_ratio}
+past_action_visible: False
+keypoint_visible_rate: 1.0
+
+at_load_dir: null
+pca_load_dir: null
+use_latent_action_before_vq: True
+obs_as_global_cond: True
+
+policy:
+  _target_: reactive_diffusion_policy.policy.latent_diffusion_unet_image_block_vae_policy.LatentDiffusionUnetImageBlockVaePolicy
+
+  shape_meta: ${shape_meta}
+
+  noise_scheduler:
+    _target_: diffusers.schedulers.scheduling_ddim.DDIMScheduler
+    num_train_timesteps: 100
+    beta_start: 0.0001
+    beta_end: 0.02
+    # beta_schedule is important
+    # this is the best we found
+    beta_schedule: squaredcos_cap_v2
+    clip_sample: True
+    set_alpha_to_one: True
+    steps_offset: 0
+    prediction_type: epsilon # or sample
+
+  obs_encoder:
+    _target_: reactive_diffusion_policy.model.vision.multi_image_obs_encoder.MultiImageObsEncoder
+    shape_meta: ${shape_meta}
+    rgb_model:
+      _target_: reactive_diffusion_policy.model.vision.model_getter.get_resnet
+      name: resnet18
+      weights: null
+    resize_shape: [240, 320]
+    random_transforms:
+      - type: RandomCrop
+        ratio: 0.90
+    use_group_norm: True
+    share_rgb_model: False
+    imagenet_norm: True
+
+
+  use_latent_action_before_vq: ${use_latent_action_before_vq}
+  at:
+    _target_: reactive_diffusion_policy.model.vae.block_vae_model.BlockEncodeVAE
+    shape_meta: ${shape_meta}
+    horizon: ${at.policy.horizon}
+    encode_horizon: ${at.policy.encode_horizon}
+    encode_block_num: ${at.policy.encode_block_num}
+    n_latent_dims: ${at.policy.n_latent_dims}
+    mlp_layer_num: ${at.policy.mlp_layer_num}
+    use_conv_encoder: ${at.policy.use_conv_encoder}
+    conv_latent_dims: ${at.policy.conv_latent_dims}
+    conv_layer_num: ${at.policy.conv_layer_num}
+    use_rnn_decoder: ${at.policy.use_rnn_decoder}
+    rnn_latent_dims: ${at.policy.rnn_latent_dims}
+    rnn_layer_num: ${at.policy.rnn_layer_num}
+    use_vq: ${at.policy.use_vq}
+    n_embed: ${at.policy.n_embed}
+    vqvae_groups: ${at.policy.vqvae_groups}
+    eval: true
+    load_dir: ${at_load_dir}
+    act_scale: ${at.policy.act_scale}
+
+  horizon: ${horizon}
+  n_action_steps: ${eval:'${n_action_steps}+${n_latency_steps}'}
+  n_obs_steps: ${n_obs_steps}
+  num_inference_steps: 100
+  obs_as_global_cond: ${obs_as_global_cond}
+  # crop_shape: null
+  diffusion_step_embed_dim: 128
+  down_dims: [512, 1024, 2048]
+  kernel_size: 5 # dummy, will be overridden by reactive_diffusion_policy/policy/latent_diffusion_unet_image_policy.py
+  n_groups: 8
+  cond_predict_scale: True
+
+  # scheduler.step params
+  # predict_epsilon: True
+
+ema:
+  _target_: reactive_diffusion_policy.model.diffusion.ema_model.EMAModel
+  update_after_step: 0
+  inv_gamma: 1.0
+  power: 0.75
+  min_value: 0.0
+  max_value: 0.9999
+
+dataloader:
+  # ResNet
+  batch_size: 64
+  # timm
+  # batch_size: 32
+  num_workers: 8
+  shuffle: True
+  pin_memory: True
+  persistent_workers: True
+
+val_dataloader:
+  # ResNet
+  batch_size: 64
+  # timm
+  # batch_size: 32
+  num_workers: 8
+  shuffle: False
+  pin_memory: True
+  persistent_workers: True
+
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 1.0e-4
+  betas: [0.95, 0.999]
+  eps: 1.0e-8
+  weight_decay: 1.0e-6
+  # timm
+  encoder_weight_decay: 1.0e-6
+
+training:
+  device: "cuda:0"
+  seed: 42
+  debug: False
+  resume: True
+  # optimization
+  lr_scheduler: cosine
+  lr_warmup_steps: 500
+  b: 401
+  num_epochs: 600
+  gradient_accumulate_every: 1
+  # EMA destroys performance when used with BatchNorm
+  # replace BatchNorm with GroupNorm.
+  use_ema: True
+  freeze_encoder: False
+  # training loop control
+  # in epochs
+  rollout_every: 50 # dummy
+  checkpoint_every: 10
+  val_every: 1
+  sample_every: 5
+  # steps per epoch
+  max_train_steps: null
+  max_val_steps: null
+  # misc
+  tqdm_interval_sec: 1.0
+  # timm
+  layer_decay: 1.0
+  encoder_lr_coefficient: 0.1
+
+logging:
+  project: latent_diffusion_policy_tactile
+  resume: True
+  mode: online
+  name: ${now:%Y.%m.%d-%H.%M.%S}_${name}_${task_name}
+  tags: ["${name}", "${task_name}", "${exp_name}"]
+  id: null
+  group: null
+
+checkpoint:
+  topk:
+    monitor_key: train_loss
+    mode: min
+    k: 1
+    format_str: 'epoch={epoch:04d}-train_loss={train_loss:.3f}.ckpt'
+  save_last_ckpt: True
+  save_last_snapshot: False
+
+multi_run:
+  run_dir: data/outputs/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}
+  wandb_name_base: ${now:%Y.%m.%d-%H.%M.%S}_${name}_${task_name}
+
+hydra:
+  job:
+    override_dirname: ${name}
+  run:
+    dir: data/outputs/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}
+  sweep:
+    dir: data/outputs/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}
+    subdir: ${hydra.job.num}

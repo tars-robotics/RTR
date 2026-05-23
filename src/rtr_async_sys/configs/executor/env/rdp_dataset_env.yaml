@@ -1,0 +1,69 @@
+_target_: rtr_async_sys.env.dp_dataset_env.DpDatasetEnv
+
+n_action_steps: 8
+eval_length: -1
+save_plot_action_path: "outputs/vis_outputs/dp_plot_actions.pkl"
+
+dataset:
+  _target_: rtr_async_sys.models.reactive_diffusion_policy.dataset.real_image_tactile_latent_diffusion_dataset.RealImageTactileLatentDiffusionDataset
+  dataset_path: data/vase2_new_A/rdp_zarr
+  horizon: 32
+  n_obs_steps: 4 # 2*obs_temporal_downsample_ratio
+  obs_temporal_downsample_ratio: 2
+  n_latency_steps: 0
+  seed: 42
+  val_ratio: 0.00
+  max_train_episodes: null
+  delta_action: False
+  relative_action: False
+
+  pad_before: 3 #${eval:'${dataset.n_obs_steps}-1+${dataset.n_latency_steps}'}
+  pad_after:  7 #${eval:'${n_action_steps}-1'}
+
+  shape_meta: &shape_meta
+    # acceptable types: rgb, low_dim
+    obs:
+      left_wrist_img:
+        shape: [3, 240, 320]
+        type: rgb
+      left_robot_tcp_pose:
+        shape: [9]
+        type: low_dim
+      left_robot_gripper_width:
+        shape: [1]
+        type: low_dim
+      left_gripper1_marker_offset_emb:
+        shape: [ 15 ]  # the raw dimension is (63*2), we use PCA to reduce the dimension to 15
+        type: low_dim
+    extended_obs: # for the AT RNN decoder of the latent diffusion policy
+      left_gripper1_marker_offset_emb:
+        shape: [ 15 ]  # the raw dimension is (63*2), we use PCA to reduce the dimension to 15
+        type: low_dim
+    action:
+      shape: [10] # (3+6+1) (x, y, z, 6d rotation, gripper_width)
+  
+  use_latent_action_before_vq: False
+  at:
+    _target_: rtr_async_sys.models.reactive_diffusion_policy.model.vae.model.VAE
+    shape_meta: *shape_meta #${dataset.shape_meta}
+    horizon: 32
+    n_latent_dims: 8
+    mlp_layer_num: 1
+    use_conv_encoder: True
+    conv_latent_dims: 32
+    conv_layer_num: 1
+    use_rnn_decoder: True
+    rnn_latent_dims: 32
+    rnn_layer_num: 1
+    use_vq: False
+    n_embed: 16
+    vqvae_groups: 4
+    eval: true
+    load_dir: null
+    act_scale: 1
+
+n_obs_steps: 2
+pca_load_dir: data/vase2_new_A/rdp_pca
+relative_action: False
+downsample_ratio: 2
+log_tactile: False

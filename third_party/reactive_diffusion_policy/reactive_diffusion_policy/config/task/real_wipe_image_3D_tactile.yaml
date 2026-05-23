@@ -1,0 +1,125 @@
+defaults:
+  - real_wipe_two_realsense_one_gelsight_one_mctac_24fps@_here_
+  - _self_
+
+name: real_wipe_image_3D_tactile
+
+# image_shape: [3, 240, 320]
+dataset_path: data/wipe_v1_zarr
+
+shape_meta: &shape_meta
+  # acceptable types: rgb, low_dim
+  obs:
+    # left_wrist_img:
+    #   shape: ${task.image_shape}
+    #   type: rgb
+    left_robot_tcp_pose:
+      shape: [9]
+      type: low_dim
+    # left_robot_gripper_width:
+    #   shape: [1]
+    #   type: low_dim
+    # left_gripper1_marker_offset_emb:
+    #   shape: [ 15 ]  # the raw dimension is (63*2), we use PCA to reduce the dimension to 15
+    #   type: low_dim
+
+    left_gripper1_tactile:
+      shape: [ 700, 3 ]  
+      type: cloud_point
+    left_gripper2_tactile:
+      shape: [ 700, 3 ] 
+      type: cloud_point
+    global_pts:
+      shape: [ 8192 , 3 ]
+      type: cloud_point
+  action:
+    shape: [10] # (3+6+1) (x, y, z, 6d rotation, gripper_width)
+
+env_runner:
+  _target_: reactive_diffusion_policy.env_runner.real_runner.RealRunner
+  eval_episodes: 10
+  max_duration_time: 35
+  tcp_action_update_interval: 2
+  gripper_action_update_interval: 2
+  tcp_pos_clip_range: # no clip for x, y, clip for z
+    - [ 0.2, -0.5, 0.04 ]
+    - [ 0.8, 0.5, 1.0 ]
+  tcp_rot_clip_range: # no clip
+    - [ -100, -100, -100 ]
+    - [ 100, 100, 100 ]
+  latency_step: 2
+  gripper_latency_step: 4
+  control_fps: 12
+  inference_fps: 6
+  n_obs_steps: ${n_obs_steps}
+  obs_temporal_downsample_ratio: 2
+  task_name: ${task_name}
+  transform_params: ${task.transforms}
+  shape_meta: *shape_meta
+  tcp_ensemble_buffer_params:
+    ensemble_mode: 'hato'
+    tau: 0.5
+  gripper_ensemble_buffer_params:
+    ensemble_mode: 'hato'
+    tau: 0.5
+  use_relative_action: ${task.dataset.relative_action}
+  action_interpolation_ratio: 1
+  enable_video_recording: True
+  vcamera_server_ip:
+    - 192.168.2.252
+    - 192.168.2.252
+  vcamera_server_port:
+    - 8102
+    - 8112
+  env_params:
+    robot_server_ip: ${task.robot_server.host_ip}
+    robot_server_port: ${task.robot_server.port}
+    device_mapping_server_ip: ${task.device_mapping_server.host_ip}
+    device_mapping_server_port: ${task.device_mapping_server.port}
+    data_processing_params:
+      # TODO: fix this (support left or right)
+      mode: 'single_arm_two_realsense_two_tactile'
+      pca_param_dict:
+        GelSight:
+          n_components: 15
+          normalize: False
+          mode: 'Eval'
+          store: False
+          transformation_matrix_path: 'data/PCA_Transform_GelSight/pca_transform_matrix.npy'
+          mean_matrix_path: 'data/PCA_Transform_GelSight/pca_mean_matrix.npy'
+        McTac:
+          n_components: 15
+          normalize: False
+          mode: 'Eval'
+          store: False
+          transformation_matrix_path: 'data/PCA_Transform_McTAC_v1/pca_transform_matrix.npy'
+          mean_matrix_path: 'data/PCA_Transform_McTAC_v1/pca_mean_matrix.npy'
+      use_6d_rotation: True
+      marker_dimension: 2
+      debug: False
+    max_fps: 10
+    debug: False
+    # gripper control params
+    use_force_control_for_gripper: ${task.teleop_server.use_force_control_for_gripper}
+    max_gripper_width: ${task.teleop_server.max_gripper_width}
+    min_gripper_width: ${task.teleop_server.min_gripper_width}
+    grasp_force: ${task.teleop_server.grasp_force}
+    gripper_control_time_interval: ${task.teleop_server.gripper_control_time_interval}
+    gripper_control_width_precision: ${task.teleop_server.gripper_control_width_precision}
+    gripper_width_threshold: 0.046
+    enable_gripper_width_clipping: True
+
+dataset:
+  _target_: reactive_diffusion_policy.dataset.real_3D_tactile_dataset.RealImageTactileDataset
+  shape_meta: *shape_meta
+  dataset_path: ${task.dataset_path}
+  horizon: ${horizon}
+  pad_before: ${eval:'${n_obs_steps}-1+${n_latency_steps}'}
+  pad_after: ${eval:'${n_action_steps}-1'}
+  n_obs_steps: ${dataset_obs_steps}
+  n_latency_steps: ${n_latency_steps}
+  seed: 42
+  val_ratio: 0.00
+  max_train_episodes: null
+  delta_action: False
+  relative_action: False

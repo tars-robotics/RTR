@@ -1,0 +1,38 @@
+_target_: pi0_5_latent_rdp_vae_rtc_model_wrapper.PI05LatentRTCModelWrapper
+
+
+device: cuda:0
+return_raw_action: False  # Must be False
+prompt: "wipe the vase."
+compress_obs: False
+interpolate: False
+interpolate_ratio: 1
+vae_config_path: "configs/rdp_vae/rdp_vae.yaml"
+vae_load_path: "data/ckpts/vase_sponge_test1_60hz/ckpts_abs/rdp_vae/n_embed_10/horizon48/latest.ckpt"
+latent_dataset_statistics: "data/ckpts/vase_sponge_test1_60hz/ckpts_abs/rdp_vae/n_embed_10/horizon48/dataset_stats.json"
+
+# rtc
+execution_horizon: 6 # latent
+inference_delay: 6
+max_guidance_weight: 1.0
+openloop_eval: False
+
+cfg:
+  _target_: lerobot.configs.train.TrainPipelineConfig
+  output_dir: outputs/eval/test
+  job_name: test
+  policy:
+    _target_: lerobot.policies.pi05.configuration_pi05.PI05Config
+    pretrained_path: "outputs/pi05_training_logl1_latent_rdp_vae_steps20000_world1/checkpoints/020000/pretrained_model"
+    compile_model: False
+    dtype: bfloat16
+    chunk_size: 48
+    n_action_steps: 48
+    max_action_dim: 10
+    max_state_dim: 9
+    device: cuda:0
+    push_to_hub: False
+  dataset:
+    _target_: lerobot.configs.default.DatasetConfig
+    repo_id: "sadpiggy/xarm_vase_sponge_test1_state9_60hz"
+  

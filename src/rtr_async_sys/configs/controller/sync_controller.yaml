@@ -1,0 +1,6 @@
+_target_: rtr_async_sys.controller.sync_controller.SyncController
+
+exec_endpoint: tcp://127.0.0.1:10010
+user_bind: tcp://*:10020
+sched_bind: tcp://*:10021
+control_horizon: 10

@@ -1,0 +1,23 @@
+_target_: openvla_oft_rdp_vae_wrapper.OpenvlaOftModelWrapper
+
+defaults:
+  - model:  rdp_vae
+  - _self_
+
+# vae: None
+ckpt_path: "data/ckpts/openvla_oft_latent/vase_sponge_test1_60hz_oft_6drotate_latent/60hz_6drotate_horizon48_latent_compress4--5000_chkpt"
+vae_ckpt_path: "data/ckpts/vase_sponge_test1_60hz/ckpts_abs/rdp_vae/n_embed_10/horizon48/latest.ckpt"
+device: cuda:0
+return_raw_action: False # Must be False
+prompt: "wipe the vase."
+compress_obs: False
+# unnorm_key: "vase_sponge_test1_oft_dataset"
+unnorm_key: "vase_sponge_test1_oft_6drotate_dataset"
+dataset_statistics_path: "data/ckpts/vase_sponge_test1_60hz/ckpts_abs/openvla_oft/vae/horizon48_compress4_n_embed_10/dataset_statistics.json"
+normalize_latent: False
+use_diffusion: False
+
+# reuse action block
+block_reuse: False
+reuse_action_num: 24
+openloop_eval: False

@@ -1,0 +1,39 @@
+_target_: rtr_async_sys.models.vla_vae.pi0_5_vae.Pi0_5_VAE
+shape_meta: &shape_meta
+  # acceptable types: rgb, low_dim
+  obs:
+    left_wrist_img:
+      shape: [3, 240, 320]
+      type: rgb
+    left_robot_tcp_pose:
+      shape: [9]
+      type: low_dim
+    left_robot_gripper_width:
+      shape: [1]
+      type: low_dim
+    left_gripper1_marker_offset_emb:
+      shape: [ 15 ]  # the raw dimension is (63*2), we use PCA to reduce the dimension to 15
+      type: low_dim
+  extended_obs: # for the AT RNN decoder of the latent diffusion policy
+    left_gripper1_marker_offset_emb:
+      shape: [ 15 ]  # the raw dimension is (63*2), we use PCA to reduce the dimension to 15
+      type: low_dim
+  action:
+    shape: [10] # (3+6+1) (x, y, z, 6d rotation, gripper_width)
+horizon: 48 #${horizon}
+n_latent_dims: 8
+mlp_layer_num: 1
+use_conv_encoder: True
+conv_latent_dims: 32
+conv_layer_num: 1
+use_rnn_decoder: False
+rnn_latent_dims: 32
+rnn_layer_num: 1
+use_vq: False
+n_embed: 10
+vqvae_groups: 4
+eval: true
+load_dir: null # Must be null; otherwise it initializes before model_wrapper and load_dir is set incorrectly
+act_scale: 1
+normalize_latent: False
+second_stage: False

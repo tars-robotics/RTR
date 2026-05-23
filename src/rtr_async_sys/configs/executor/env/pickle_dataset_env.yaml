@@ -1,0 +1,14 @@
+_target_: rtr_async_sys.env.pickle_dataset_env.PickleDatasetEnv
+
+
+data_dir: "data/ckpts/vase_sponge_test1_pickle/tacwm_samples_16_downsample_1/train"
+prefetch: False
+compress_obs: False
+visualize_image: False
+
+relative_action: False
+
+map_dict:
+  abs_action: 'abs_action'
+
+action_space: 'abs_action'

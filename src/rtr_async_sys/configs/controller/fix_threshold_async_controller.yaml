@@ -1,0 +1,11 @@
+_target_: rtr_async_sys.controller.fix_threshold_async_controller.FixThresholdAsyncController
+
+exec_endpoint: tcp://127.0.0.1:10010
+passive_user_endpoint: tcp://127.0.0.1:10020
+sched_bind: tcp://*:10021
+control_hz: 60
+control_horizon: 48
+inference_step_threshold: 36
+warm_up_step: 0
+open_loop_eval: False
+request_obs_hz: 100

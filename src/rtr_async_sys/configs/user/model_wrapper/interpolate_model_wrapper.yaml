@@ -1,0 +1,5 @@
+_target_: rtr_async_sys.model_wrapper.interpolate_model_wrapper.InterpolateModel
+
+
+interpolate_ratio: 4
+device: cuda:0

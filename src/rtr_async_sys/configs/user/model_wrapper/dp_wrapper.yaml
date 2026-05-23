@@ -1,0 +1,13 @@
+_target_: rtr_async_sys.model_wrapper.dp_model_wrapper.DpModelWrapper
+
+# model: src/rtr_async_sys/configs/model/rdp/dp.yaml
+defaults:
+  - model: rdp/dp
+
+ckpt_path: data/reverse_ckpts/dp.ckpt
+device: cuda:0
+return_raw_action: False
+compress_obs: False
+
+interpolate: False
+interpolate_ratio: 1

@@ -1,0 +1,25 @@
+horizon: 48
+encode_horizon: 12
+encode_block_num: 4
+n_obs_steps: 2
+dataset_obs_temporal_downsample_ratio: 2
+
+policy:
+  horizon: ${horizon}
+  encode_horizon: ${encode_horizon}
+  encode_block_num: ${encode_block_num}
+  n_latent_dims: 8 # for wiping, lifting
+  mlp_layer_num: 1
+  use_conv_encoder: True
+  conv_latent_dims: 32
+  conv_layer_num: 1
+  use_rnn_decoder: False
+  rnn_latent_dims: 32
+  rnn_layer_num: 1
+  kl_multiplier: 1e-6 # keep it small for non-strict regularization
+  n_embed: 10
+  # ==============
+  use_vq: False
+  vqvae_groups: 4
+  eval: false
+  act_scale: 1

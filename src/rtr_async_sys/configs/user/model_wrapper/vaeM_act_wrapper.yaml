@@ -1,0 +1,19 @@
+_target_: rtr_async_sys.model_wrapper.vaeM_act_model_wrapper.VaeMActModelWrapper
+
+normalizer_path: "data/vase_sponge_test1/tacwm_samples_16_downsample_1/normalizer.pth"
+device: "cuda:0"
+ckpt_path: "data/checkpoints/action_vae/latest.pth"
+return_raw_action: False
+compress_obs: False
+input_key_list: ['abs_action']
+action_space: 'abs_action'
+
+model:
+  input_dim: 9
+  horizon: 16 # should match with window_size of dataset.
+  latent_dim: 512
+  hidden_state: 512
+  n_embed: 32
+  mlp_layer_num: 3
+  time_compression_ratio: 4
+  act_scale: 1.0

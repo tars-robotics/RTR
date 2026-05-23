@@ -1,0 +1,9 @@
+_target_: rtr_async_sys.user.simple_user.SimpleUser
+
+defaults:
+  - model_wrapper:  rdp_wrapper
+  - _self_
+# model: src/rtr_async_sys/configs/model_wrapper/rdp_wrapper_abs.yaml
+controller_endpoint: tcp://127.0.0.1:10020 # make sure the port matches the port of the controller
+scheduler_endpoint: tcp://127.0.0.1:10030
+user_hz: 2

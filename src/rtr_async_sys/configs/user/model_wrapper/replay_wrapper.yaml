@@ -1,0 +1,11 @@
+_target_: rtr_async_sys.model_wrapper.replay_model_wrapper.ReplayModelWrapper
+
+# model: src/rtr_async_sys/configs/model/rdp/dp.yaml
+model: null
+ckpt_path: null
+device: null
+return_raw_action: False
+compress_obs: False
+
+horizon: 48
+zarr_path: "./data/ckpts/vase_sponge_test1_60hz/rdp_zarr/replay_buffer.zarr"

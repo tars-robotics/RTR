@@ -1,0 +1,9 @@
+_target_: hello_model_wrapper.HelloModelWrapper
+
+defaults:
+  - model: hello_model
+  - _self_
+
+ckpt_path: None
+device: cuda:0
+return_raw_action: True
