@@ -61,7 +61,7 @@ Our core contributions:
 
 Two real-robot video groups illustrate the two ideas above. Animated
 previews are embedded as GIFs; the full-resolution MP4s live next to them
-under [`artifacts/demo_videos/`](artifacts/demo_videos/).
+under [`artifacts/demo_videos/`](artifacts/demo_videos/). Full demo videos are available at `artifacts/demo_videos/demo_videos.zip`.
 
 ### Group 1 — High-frequency + latent enable smooth, low-jitter control
 
