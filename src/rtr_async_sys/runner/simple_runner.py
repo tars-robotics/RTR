@@ -197,8 +197,16 @@ def main(cfg: DictConfig):
     # Start the full system.
     runner.launch_all()
 
-    # Keep the Runner main thread blocked.
+    # Keep the Runner main thread blocked; if any child process exits, shut everything down.
     while True:
+        for p in runner.processes:
+            if p.exitcode is not None:
+                logger.warning(
+                    f"[Runner] Child process exited (pid={p.pid}, exitcode={p.exitcode}), shutting down..."
+                )
+                exitcode = int(p.exitcode)
+                runner.stop_all()
+                raise SystemExit(exitcode)
         time.sleep(1)
 
 

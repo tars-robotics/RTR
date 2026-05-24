@@ -180,7 +180,10 @@ class DpDatasetEnv(AbsEnv):
         """
         if self.eval_length != -1 and self.timestep > self.eval_length:# exceed max length
             logger.info("timestep exceeds eval_length, exit eval system")
-            exit()
+            raise SystemExit(0)
+        if self.timestep >= len(self.dataset):
+            logger.info("dataset exhausted, exit eval system")
+            raise SystemExit(0)
         obs = self.dataset[self.timestep]['obs']
         if self.obs_need_action:
             obs['action'] = self.dataset[self.timestep]['action']
