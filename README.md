@@ -1,5 +1,7 @@
 # Learning High-Frequency Continuous Action Chunks in Latent Space
 
+[**Paper (arXiv)**](https://arxiv.org/pdf/2605.24931) &nbsp;|&nbsp; [**Demo Page**](https://sjtu-zhao-lab.github.io/RTR/)
+
 This repository is the official open-source implementation of our paper
 **"Learning High-Frequency Continuous Action Chunks in Latent Space"**.
 It provides a Hydra-configurable, multi-process asynchronous robotics control
@@ -62,6 +64,7 @@ Our core contributions:
 Two real-robot video groups illustrate the two ideas above. Animated
 previews are embedded as GIFs; the full-resolution MP4s live next to them
 under [`artifacts/demo_videos/`](artifacts/demo_videos/). Full demo videos are available at `artifacts/demo_videos/demo_videos.zip`.
+More demos and qualitative results are showcased on our [project page](https://sjtu-zhao-lab.github.io/RTR/).
 
 ### Group 1 — High-frequency + latent enable smooth, low-jitter control
 
