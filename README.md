@@ -174,4 +174,13 @@ licenses (each ships its own `LICENSE` file).
 
 ## Citation
 
-If you use this codebase, please cite the accompanying paper (TBD).
+If you find RTR useful in your work, please consider citing our work.
+
+```
+@article{wang2026learning,
+  title={{Learning High-Frequency Continuous Action Chunks in Latent Space}},
+  author={Wang, Kunyun and Zheng, Yuhang and Zheng, Yupeng and Zhao, Jieru and Ding, Wenchao},
+  journal={arXiv preprint arXiv:2605.24931},
+  year={2026}
+}
+```
