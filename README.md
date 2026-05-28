@@ -1,6 +1,6 @@
 # Learning High-Frequency Continuous Action Chunks in Latent Space
 
-[**Paper (arXiv)**](https://arxiv.org/pdf/2605.24931) &nbsp;|&nbsp; [**Demo Page**](https://sjtu-zhao-lab.github.io/RTR/)
+[**Paper (arXiv)**](https://arxiv.org/pdf/2605.24931) &nbsp;|&nbsp; [**Demo Page**](https://sjtu-zhao-lab.github.io/RTR/) &nbsp;|&nbsp; [**Hugging Face Dataset**](https://huggingface.co/datasets/sadpiggy/rtr_robot_sys_zarr)
 
 This repository is the official open-source implementation of our paper
 **"Learning High-Frequency Continuous Action Chunks in Latent Space"**.
